@@ -1,0 +1,773 @@
+/* =============================================
+   ROMANTIC CUTE PHOTOBOOTH - COMPLETE CSS
+   Theme: Yellow + White + Soft Pink Accents
+   ============================================= */
+
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&display=swap');
+
+:root {
+    --bg-cream: #FFF8E1;
+    --bg-yellow-light: #FFFDE7;
+    --primary-yellow: #FBC02D;
+    --primary-yellow-light: #FFF9C4;
+    --primary-yellow-dark: #F9A825;
+    --accent-pink: #F8BBD0;
+    --accent-pink-dark: #EC407A;
+    --accent-peach: #FFCCBC;
+    --white: #FFFFFF;
+    --text-dark: #4E342E;
+    --text-medium: #795548;
+    --text-light: #A1887F;
+    --glass-bg: rgba(255, 255, 255, 0.75);
+    --glass-border: rgba(255, 255, 255, 0.9);
+    --shadow-soft: 0 8px 32px rgba(251, 192, 45, 0.12);
+    --shadow-medium: 0 12px 40px rgba(251, 192, 45, 0.2);
+    --shadow-glow: 0 0 60px rgba(251, 192, 45, 0.3);
+    --radius-sm: 12px;
+    --radius-md: 20px;
+    --radius-lg: 30px;
+    --radius-xl: 40px;
+    --transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Reset */
+*, *::before, *::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+body {
+    font-family: 'Outfit', 'Quicksand', -apple-system, sans-serif;
+    background: linear-gradient(135deg, #FFFDE7 0%, #FFF9C4 30%, #FFF8E1 60%, #FFF9C4 100%);
+    color: var(--text-dark);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+/* =============================================
+   ANIMATED BACKGROUND PARTICLES
+   ============================================= */
+#particles {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;
+    z-index: 0;
+    overflow: hidden;
+}
+
+.particle {
+    position: absolute;
+    pointer-events: none;
+    animation: particleFloat linear infinite;
+    opacity: 0;
+}
+
+.particle.heart { font-size: 18px; }
+.particle.star { font-size: 14px; }
+.particle.sparkle { font-size: 12px; }
+
+@keyframes particleFloat {
+    0% { 
+        transform: translateY(100vh) rotate(0deg) scale(0); 
+        opacity: 0; 
+    }
+    10% { 
+        opacity: 0.8; 
+        transform: translateY(90vh) rotate(30deg) scale(1);
+    }
+    90% { 
+        opacity: 0.6; 
+    }
+    100% { 
+        transform: translateY(-10vh) rotate(360deg) scale(0.5); 
+        opacity: 0; 
+    }
+}
+
+/* =============================================
+   FLOATING DECORATIONS (CSS-DRAWN CUTE ANIMALS)
+   ============================================= */
+.floating-decors {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.cute-deco {
+    position: absolute;
+    pointer-events: none;
+    filter: drop-shadow(0 4px 8px rgba(0,0,0,0.1));
+}
+
+.cute-deco.bear {
+    font-size: 60px;
+    top: 8%;
+    left: 4%;
+    animation: floatBear 6s ease-in-out infinite;
+}
+
+.cute-deco.bunny {
+    font-size: 45px;
+    bottom: 8%;
+    right: 4%;
+    animation: floatBunny 7s ease-in-out infinite;
+}
+
+.cute-deco.flower1 {
+    font-size: 28px;
+    top: 45%;
+    left: 2%;
+    opacity: 0.6;
+    animation: floatFlower 9s ease-in-out infinite;
+}
+
+.cute-deco.flower2 {
+    font-size: 24px;
+    top: 35%;
+    right: 3%;
+    opacity: 0.5;
+    animation: floatFlower 7s ease-in-out infinite reverse;
+}
+
+/* Premium Doll Image Decoration */
+.cute-deco.doll-img {
+    top: 3%;
+    right: 3%;
+    width: 140px;
+    height: auto;
+    animation: floatDoll 6s ease-in-out infinite;
+    filter: drop-shadow(0 6px 12px rgba(0,0,0,0.15));
+}
+
+.cute-deco.doll-img img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+@keyframes floatBear {
+    0%, 100% { transform: translateY(0) rotate(-2deg); }
+    50% { transform: translateY(-12px) rotate(2deg); }
+}
+
+@keyframes floatBunny {
+    0%, 100% { transform: translateY(0) rotate(1deg); }
+    50% { transform: translateY(-15px) rotate(-2deg); }
+}
+
+@keyframes floatFlower {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(-8px) rotate(5deg); }
+}
+
+@keyframes floatDoll {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(-10px) rotate(2deg); }
+}
+
+/* =============================================
+   APP CONTAINER
+   ============================================= */
+.app-container {
+    width: 100%;
+    max-width: 1100px;
+    height: 100vh;
+    position: relative;
+    z-index: 10;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* =============================================
+   SCREENS (Shared)
+   ============================================= */
+.screen {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 92%;
+    max-width: 680px;
+    max-height: 92vh;
+    overflow-y: auto;
+    background: var(--glass-bg);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border-radius: var(--radius-xl);
+    padding: 0;
+    box-shadow: var(--shadow-medium), inset 0 1px 0 var(--glass-border);
+    display: none;
+    border: 2px solid rgba(255,255,255,0.8);
+    scrollbar-width: none;
+}
+
+.screen::-webkit-scrollbar { display: none; }
+
+.screen.active {
+    display: block;
+    animation: screenIn 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes screenIn {
+    from { 
+        opacity: 0; 
+        transform: translate(-50%, -48%) scale(0.92); 
+    }
+    to { 
+        opacity: 1; 
+        transform: translate(-50%, -50%) scale(1); 
+    }
+}
+
+.screen-inner {
+    padding: 35px 30px;
+}
+
+/* =============================================
+   WELCOME SCREEN
+   ============================================= */
+.logo-area {
+    text-align: center;
+    margin-bottom: 28px;
+}
+
+.logo-icon {
+    display: inline-block;
+    margin-bottom: 12px;
+    animation: logoPulse 2s ease-in-out infinite;
+}
+
+@keyframes logoPulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.08); }
+}
+
+.title {
+    font-family: 'Dancing Script', cursive;
+    font-size: 2.8rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, var(--primary-yellow-dark), var(--accent-pink-dark), var(--primary-yellow));
+    background-size: 200% 200%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: gradientShift 4s ease infinite;
+    line-height: 1.2;
+}
+
+@keyframes gradientShift {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+}
+
+.subtitle {
+    font-size: 1rem;
+    color: var(--text-medium);
+    margin-top: 6px;
+    font-weight: 400;
+}
+
+/* Mode Selection */
+.mode-selection, .filter-selection, .frame-selection {
+    margin-bottom: 22px;
+}
+
+.mode-label {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-medium);
+    margin-bottom: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.mode-options {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+}
+
+.mode-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    padding: 14px 8px;
+    border-radius: var(--radius-md);
+    border: 2px solid rgba(251, 192, 45, 0.3);
+    background: rgba(255,255,255,0.6);
+    cursor: pointer;
+    font-family: inherit;
+    transition: var(--transition);
+}
+
+.mode-btn:hover {
+    border-color: var(--primary-yellow);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(251, 192, 45, 0.2);
+}
+
+.mode-btn.active {
+    background: linear-gradient(135deg, var(--primary-yellow), var(--primary-yellow-dark));
+    color: white;
+    border-color: var(--primary-yellow-dark);
+    box-shadow: 0 4px 15px rgba(251, 192, 45, 0.4);
+}
+
+.mode-icon { 
+    font-size: 1.2rem; 
+    font-weight: 800; 
+    color: var(--primary-yellow-dark);
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: rgba(251, 192, 45, 0.12);
+}
+
+.mode-btn.active .mode-icon {
+    background: rgba(255,255,255,0.3);
+    color: white;
+}
+
+.mode-text { font-size: 0.75rem; font-weight: 600; }
+
+/* Filter Selection */
+.filter-options {
+    display: flex;
+    gap: 10px;
+    overflow-x: auto;
+    padding-bottom: 5px;
+}
+
+.filter-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    padding: 8px;
+    border: 2px solid transparent;
+    border-radius: var(--radius-sm);
+    background: rgba(255,255,255,0.5);
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 0.7rem;
+    font-weight: 500;
+    color: var(--text-medium);
+    transition: var(--transition);
+    min-width: 65px;
+}
+
+.filter-btn:hover { border-color: var(--primary-yellow); }
+
+.filter-btn.active {
+    border-color: var(--primary-yellow);
+    background: var(--primary-yellow-light);
+    color: var(--text-dark);
+    font-weight: 700;
+}
+
+.filter-preview {
+    width: 45px;
+    height: 45px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #FFD54F, #FFA726);
+    overflow: hidden;
+}
+
+.filter-preview.warm { filter: saturate(1.4) sepia(0.2); }
+.filter-preview.bw { filter: grayscale(1); }
+.filter-preview.vintage { filter: sepia(0.5) contrast(0.9); }
+.filter-preview.pink { filter: hue-rotate(320deg) saturate(1.3); background: linear-gradient(135deg, #F8BBD0, #EC407A); }
+
+/* Frame Selection */
+.frame-options {
+    display: flex;
+    gap: 10px;
+}
+
+.frame-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    padding: 8px 12px;
+    border: 2px solid transparent;
+    border-radius: var(--radius-sm);
+    background: rgba(255,255,255,0.5);
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 0.7rem;
+    font-weight: 500;
+    color: var(--text-medium);
+    transition: var(--transition);
+}
+
+.frame-btn:hover { border-color: var(--primary-yellow); }
+
+.frame-btn.active {
+    border-color: var(--primary-yellow);
+    background: var(--primary-yellow-light);
+    font-weight: 700;
+}
+
+.frame-color {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    border: 1px solid rgba(0,0,0,0.1);
+}
+
+/* Primary Button */
+.primary-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 16px 40px;
+    font-size: 1.1rem;
+    font-family: inherit;
+    border-radius: 50px;
+    border: none;
+    background: linear-gradient(135deg, var(--primary-yellow), var(--primary-yellow-dark));
+    color: white;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 6px 25px rgba(251, 192, 45, 0.4);
+    transition: var(--transition);
+    position: relative;
+    overflow: hidden;
+}
+
+.primary-btn::before {
+    content: '';
+    position: absolute;
+    top: 0; left: -100%;
+    width: 100%; height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+    transition: left 0.5s;
+}
+
+.primary-btn:hover::before { left: 100%; }
+
+.primary-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 30px rgba(251, 192, 45, 0.6);
+}
+
+.primary-btn:active {
+    transform: translateY(-1px) scale(0.98);
+}
+
+.pulse-animation {
+    animation: btnPulse 2.5s ease-in-out infinite;
+}
+
+@keyframes btnPulse {
+    0%, 100% { box-shadow: 0 6px 25px rgba(251, 192, 45, 0.4); }
+    50% { box-shadow: 0 6px 35px rgba(251, 192, 45, 0.7), 0 0 0 8px rgba(251, 192, 45, 0.1); }
+}
+
+.secondary-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 13px 30px;
+    border-radius: 50px;
+    border: 2px solid var(--primary-yellow);
+    background: transparent;
+    color: var(--primary-yellow-dark);
+    font-weight: 600;
+    font-family: inherit;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.secondary-btn:hover {
+    background: var(--primary-yellow-light);
+    transform: translateY(-2px);
+}
+
+/* =============================================
+   CAMERA SCREEN
+   ============================================= */
+.camera-layout {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.camera-header {
+    text-align: center;
+}
+
+.shots-progress {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+
+.progress-dots {
+    display: flex;
+    gap: 8px;
+}
+
+.progress-dot {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: rgba(251, 192, 45, 0.2);
+    border: 2px solid rgba(251, 192, 45, 0.4);
+    transition: var(--transition);
+}
+
+.progress-dot.done {
+    background: var(--primary-yellow);
+    border-color: var(--primary-yellow-dark);
+    box-shadow: 0 0 8px rgba(251, 192, 45, 0.5);
+    animation: dotPop 0.3s ease;
+}
+
+.progress-dot.active {
+    border-color: var(--primary-yellow);
+    animation: dotPulse 1s ease-in-out infinite;
+}
+
+@keyframes dotPop {
+    0% { transform: scale(0.5); }
+    50% { transform: scale(1.3); }
+    100% { transform: scale(1); }
+}
+
+@keyframes dotPulse {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.2); opacity: 0.7; }
+}
+
+.shots-text {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-medium);
+}
+
+/* Camera */
+.camera-main {
+    display: flex;
+    justify-content: center;
+}
+
+.camera-wrapper {
+    width: 100%;
+    max-width: 520px;
+    aspect-ratio: 4/3;
+    background: #111;
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    position: relative;
+    border: 5px solid white;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.12);
+}
+
+#webcam {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transform: scaleX(-1);
+    display: block;
+}
+
+/* Countdown Overlay */
+.countdown-overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: rgba(0,0,0,0.3);
+    z-index: 50;
+}
+
+.countdown-overlay.hidden {
+    display: none;
+}
+
+.countdown-number {
+    font-size: 10rem;
+    font-weight: 800;
+    color: white;
+    text-shadow: 0 0 40px rgba(251, 192, 45, 0.8), 0 0 80px rgba(251, 192, 45, 0.4);
+    animation: countPulse 1s ease-in-out infinite;
+}
+
+@keyframes countPulse {
+    0% { transform: scale(0.8); opacity: 0.5; }
+    50% { transform: scale(1.1); opacity: 1; }
+    100% { transform: scale(0.8); opacity: 0.5; }
+}
+
+/* Flash Overlay */
+.flash-overlay {
+    position: absolute;
+    inset: 0;
+    background: white;
+    z-index: 60;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.05s;
+}
+
+.flash-overlay.flash {
+    animation: flashAnim 0.3s ease-out;
+}
+
+@keyframes flashAnim {
+    0% { opacity: 1; }
+    100% { opacity: 0; }
+}
+
+/* Thumbnail Strip */
+.thumbnail-strip {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    right: 10px;
+    display: flex;
+    gap: 6px;
+    z-index: 40;
+}
+
+.thumbnail {
+    width: 60px;
+    height: 45px;
+    border-radius: 6px;
+    border: 2px solid white;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    animation: thumbIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.thumbnail img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+@keyframes thumbIn {
+    from { transform: scale(0) rotate(-10deg); opacity: 0; }
+    to { transform: scale(1) rotate(0); opacity: 1; }
+}
+
+/* Camera Footer */
+.camera-footer {
+    text-align: center;
+}
+
+.status-text {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--text-medium);
+}
+
+/* =============================================
+   RESULT SCREEN
+   ============================================= */
+.result-layout {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+.result-title {
+    font-family: 'Dancing Script', cursive;
+    font-size: 1.8rem;
+    color: var(--text-dark);
+    text-align: center;
+}
+
+.result-main {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.canvas-frame {
+    padding: 12px;
+    background: white;
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-soft);
+    display: inline-block;
+}
+
+#final-canvas {
+    display: block;
+    max-width: 100%;
+    max-height: 55vh;
+    border-radius: 4px;
+}
+
+.result-actions {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+/* =============================================
+   RESPONSIVE
+   ============================================= */
+@media (max-width: 640px) {
+    .screen {
+        width: 96%;
+        border-radius: var(--radius-lg);
+    }
+
+    .screen-inner {
+        padding: 25px 18px;
+    }
+
+    .title {
+        font-size: 2.2rem;
+    }
+
+    .mode-options {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 6px;
+    }
+
+    .mode-btn { padding: 10px 6px; }
+
+    .filter-options { gap: 6px; }
+
+    .camera-wrapper {
+        border-width: 4px;
+    }
+
+    .countdown-number {
+        font-size: 6rem;
+    }
+
+    .primary-btn {
+        padding: 14px 30px;
+        font-size: 1rem;
+    }
+
+    .cute-deco { font-size: 35px !important; }
+}

@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cute Romantic Photobooth</title>
+    <meta name="description" content="Photobooth lucu dengan tema romantis kuning putih. Abadikan momen manismu!">
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Quicksand:wght@300;400;500;600;700&family=Dancing+Script:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Animated Background Particles -->
+    <div id="particles"></div>
+
+    <!-- Floating Cute Decorations (SVG-based, no background issues) -->
+    <div class="floating-decors" id="floating-decors"></div>
+
+    <div class="app-container">
+        <!-- ============ WELCOME SCREEN ============ -->
+        <section id="welcome-screen" class="screen active">
+            <div class="screen-inner">
+                <div class="logo-area">
+                    <div class="logo-icon">
+                        <svg viewBox="0 0 80 80" width="80" height="80">
+                            <circle cx="40" cy="40" r="38" fill="#FFF9C4" stroke="#FBC02D" stroke-width="3"/>
+                            <text x="40" y="50" text-anchor="middle" font-size="36">📸</text>
+                        </svg>
+                    </div>
+                    <h1 class="title">Cute Photobooth</h1>
+                    <p class="subtitle">Abadikan momen manis kamu</p>
+                </div>
+
+                <div class="mode-selection">
+                    <label class="mode-label">Pilih jumlah foto:</label>
+                    <div class="mode-options">
+                        <button class="mode-btn" data-shots="1">
+                            <span class="mode-icon">1</span>
+                            <span class="mode-text">1 Foto</span>
+                        </button>
+                        <button class="mode-btn" data-shots="2">
+                            <span class="mode-icon">2</span>
+                            <span class="mode-text">2 Foto</span>
+                        </button>
+                        <button class="mode-btn" data-shots="3">
+                            <span class="mode-icon">3</span>
+                            <span class="mode-text">3 Foto</span>
+                        </button>
+                        <button class="mode-btn active" data-shots="4">
+                            <span class="mode-icon">4</span>
+                            <span class="mode-text">4 Foto</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="filter-selection">
+                    <label class="mode-label">Pilih filter:</label>
+                    <div class="filter-options">
+                        <button class="filter-btn active" data-filter="none">
+                            <div class="filter-preview normal"></div>
+                            <span>Normal</span>
+                        </button>
+                        <button class="filter-btn" data-filter="warm">
+                            <div class="filter-preview warm"></div>
+                            <span>Warm</span>
+                        </button>
+                        <button class="filter-btn" data-filter="bw">
+                            <div class="filter-preview bw"></div>
+                            <span>B&W</span>
+                        </button>
+                        <button class="filter-btn" data-filter="vintage">
+                            <div class="filter-preview vintage"></div>
+                            <span>Vintage</span>
+                        </button>
+                        <button class="filter-btn" data-filter="pink">
+                            <div class="filter-preview pink"></div>
+                            <span>Pink</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="frame-selection">
+                    <label class="mode-label">Pilih warna frame:</label>
+                    <div class="frame-options">
+                        <button class="frame-btn active" data-frame="white">
+                            <div class="frame-color" style="background: linear-gradient(135deg, #fff, #FFF9C4)"></div>
+                            <span>Putih</span>
+                        </button>
+                        <button class="frame-btn" data-frame="pink">
+                            <div class="frame-color" style="background: linear-gradient(135deg, #FFE4E1, #F8BBD0)"></div>
+                            <span>Pink</span>
+                        </button>
+                        <button class="frame-btn" data-frame="yellow">
+                            <div class="frame-color" style="background: linear-gradient(135deg, #FFF9C4, #FBC02D)"></div>
+                            <span>Kuning</span>
+                        </button>
+                        <button class="frame-btn" data-frame="black">
+                            <div class="frame-color" style="background: linear-gradient(135deg, #333, #111)"></div>
+                            <span>Hitam</span>
+                        </button>
+                    </div>
+                </div>
+
+                <button id="start-btn" class="primary-btn pulse-animation">
+                    <span>Mulai Foto</span>
+                    <svg viewBox="0 0 24 24" width="24" height="24" fill="white"><path d="M12 15.2l-3.2-3.2h2.4V6h1.6v6h2.4L12 15.2zM20 4h-3.2L15 2H9L7.2 4H4C2.9 4 2 4.9 2 6v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 14H4V6h4.1l1.8-2h4.2l1.8 2H20v12zM12 8c-2.2 0-4 1.8-4 4s1.8 4 4 4 4-1.8 4-4-1.8-4-4-4zm0 6c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2z"/></svg>
+                </button>
+            </div>
+        </section>
+
+        <!-- ============ CAMERA SCREEN ============ -->
+        <section id="camera-screen" class="screen">
+            <div class="screen-inner camera-layout">
+                <div class="camera-header">
+                    <div class="shots-progress">
+                        <div class="progress-dots" id="progress-dots"></div>
+                        <span class="shots-text">Foto <span id="current-shot">0</span> / <span id="total-shots">4</span></span>
+                    </div>
+                </div>
+                <div class="camera-main">
+                    <div class="camera-wrapper" id="camera-wrapper">
+                        <video id="webcam" autoplay playsinline></video>
+                        <div id="countdown-overlay" class="countdown-overlay hidden">
+                            <span id="countdown-number" class="countdown-number">3</span>
+                        </div>
+                        <div id="flash-overlay" class="flash-overlay"></div>
+                        <!-- Thumbnail strip of taken shots -->
+                        <div class="thumbnail-strip" id="thumbnail-strip"></div>
+                    </div>
+                </div>
+                <div class="camera-footer">
+                    <p class="status-text" id="status-text">Bersiap-siap...</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============ RESULT SCREEN ============ -->
+        <section id="result-screen" class="screen">
+            <div class="screen-inner result-layout">
+                <h2 class="result-title">Foto kamu sudah jadi!</h2>
+                <div class="result-main">
+                    <div class="canvas-frame">
+                        <canvas id="final-canvas"></canvas>
+                    </div>
+                </div>
+                <div class="result-actions">
+                    <button id="download-btn" class="primary-btn">
+                        <span>Download Foto</span>
+                        <svg viewBox="0 0 24 24" width="22" height="22" fill="white"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
+                    </button>
+                    <button id="restart-btn" class="secondary-btn">
+                        <span>Foto Lagi</span>
+                        <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
+                    </button>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
