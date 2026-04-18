@@ -1,75 +1,67 @@
-# 🎀 Cute Romantic Photobooth
+# 🎀 Cute Premium Photobooth
 
-Website photobooth lucu bernuansa romantis dengan tema kuning putih. Dibuat sepenuhnya di sisi client (tanpa backend), langsung bisa membuka kamera dan memotret!
-
----
-
-## Fitur
-
-- **Pilihan Jumlah Foto** — Pilih 1, 2, 3, atau 4 foto dalam satu sesi pemotretan.
-- **Filter Foto** — Tersedia 5 pilihan filter: Normal, Warm, B&W, Vintage, dan Pink.
-- **Pilihan Warna Frame** — 4 variasi warna frame: Putih, Pink, Kuning, dan Hitam.
-- **Countdown Otomatis** — Hitung mundur 3 detik sebelum setiap jepretan.
-- **Efek Flash** — Efek kilat kamera saat foto diambil.
-- **Thumbnail Preview** — Foto yang sudah diambil langsung tampil sebagai thumbnail kecil di layar kamera.
-- **Foto Strip dengan Bingkai** — Hasil foto otomatis disusun dalam format strip photobooth vertikal dengan bingkai dekoratif, tanggal, dan boneka lucu (teddy bear & bunny) yang digambar langsung di canvas.
-- **Download Hasil** — Unduh hasil foto strip sebagai file PNG berkualitas tinggi dengan satu klik.
-- **Tanpa Backend** — Semua proses berjalan di browser. Tidak perlu server, tidak perlu instalasi.
+Website photobooth lucu dengan sistem pemilihan bingkai (frame) yang kompleks dan premium. Dibuat sepenuhnya di sisi client (tanpa backend), langsung bisa membuka kamera dan memotret dengan berbagai tema menarik!
 
 ---
 
-## Cara Menggunakan
+## ✨ Fitur Utama
+
+- **🖼️ 10 Tema Bingkai Premium** — Pilihan tema beragam mulai dari *Classic*, *Romantic Pink*, hingga tema eksklusif **Bank Perunggu** (Maroon & Bronze), *Sakura Garden*, dan *Midnight Dark*.
+- **🎨 UI Glassmorphism Premium** — Antarmuka modern dengan efek blur transparan yang cantik dan animasi yang halus.
+- **📸 7 Filter Foto** — Pilihan filter: Normal, Warm, B&W, Vintage, Pink, Cool, dan Drama.
+- **⚙️ Pengaturan Fleksibel** — Pilih jumlah jepretan (1-4 foto) dalam satu sesi.
+- **🌸 Dekorasi Melimpah** — Latar belakang interaktif dengan bunga-bunga mengambang, kupu-kupu, boneka lucu, dan efek partikel bercahaya.
+- **📷 Fitur Kamera Lengkap** — Countdown otomatis, efek flash, and thumbnail preview saat pemotretan.
+- **🎨 Rendering Canvas Cerdas** — Hasil foto strip dibuat secara otomatis dengan dekorasi khusus sesuai tema yang dipilih.
+- **📥 Download Berkualitas** — Unduh hasil foto strip sebagai file PNG berkualitas tinggi langsung ke perangkatmu.
+- **🔒 Privasi Terjamin** — Semua proses dilakukan di browser kamu. Tidak ada data atau foto yang dikirim ke server.
+
+---
+
+## 🚀 Cara Menggunakan
 
 1. Buka file `index.html` di browser modern (Chrome, Edge, Firefox).
-2. Izinkan akses kamera saat diminta.
-3. Pilih jumlah foto, filter, dan warna frame sesuai keinginan.
-4. Klik tombol **"Mulai Foto"**.
-5. Berpose! Tunggu hitung mundur 3 detik untuk setiap foto.
-6. Setelah semua foto selesai, hasil strip akan otomatis dibuat.
-7. Klik **"Download Foto"** untuk mengunduh hasilnya.
-8. Klik **"Foto Lagi"** jika ingin mengulang.
+2. **Pilih Bingkai**: Pilih satu dari 10 tema bingkai yang tersedia, lalu klik "Lanjut Pilih Setting".
+3. **Pilih Setting**: Atur jumlah foto dan pilih filter yang kamu sukai.
+4. **Mulai Foto**: Klik tombol "Mulai Foto" dan izinkan akses kamera.
+5. **Berpose**: Tunggu hitung mundur untuk setiap foto.
+6. **Download**: Klik "Download Foto" untuk menyimpan hasil strip kamu.
 
 ---
 
-## Struktur File
+## 📂 Struktur Project
 
 ```
 fotobooth/
-├── index.html          # Halaman utama
-├── style.css           # Seluruh styling dan animasi
-├── app.js              # Logika kamera, filter, dan rendering canvas
-└── README.md           # Dokumentasi (file ini)
+├── index.html          # Struktur halaman dengan sistem multi-screen
+├── style.css           # Styling premium, animasi, dan desain responsif
+├── app.js              # Logika sistem tema, kamera, dan rendering canvas
+├── doll_premium.png    # Aset dekorasi boneka
+├── doll1.png           # Aset dekorasi boneka tambahan
+└── README.md           # Dokumentasi project
 ```
 
 ---
 
-## Teknologi
+## 🛠️ Teknologi
 
 | Komponen | Teknologi |
 |---|---|
-| Struktur | HTML5 |
-| Styling | CSS3 (Vanilla) |
-| Logika | JavaScript (Vanilla) |
-| Kamera | MediaDevices API (`getUserMedia`) |
-| Rendering Foto | Canvas 2D API |
-| Font | Google Fonts (Outfit, Quicksand, Dancing Script) |
+| Struktur | HTML5 Semantic Elements |
+| Styling | CSS3 (Vanilla) dengan Variabel & CSS Animations |
+| Logika | JavaScript (ES6+) |
+| Kamera | WebRTC MediaDevices API |
+| Rendering | HTML5 Canvas 2D API |
+| Font | Google Fonts (Outfit, Dancing Script, Playfair Display) |
 
 ---
 
-## Persyaratan
+## 📝 Catatan Teknis
 
-- Browser modern yang mendukung `getUserMedia` (Chrome 53+, Firefox 36+, Edge 12+).
-- Perangkat dengan kamera (webcam laptop atau kamera HP).
-- Koneksi internet hanya diperlukan untuk memuat Google Fonts pada kunjungan pertama.
-
----
-
-## Catatan
-
-- Semua foto diproses secara lokal di browser kamu. **Tidak ada foto yang dikirim ke server manapun.**
-- Filter diterapkan secara pixel-level pada canvas, bukan hanya CSS filter, sehingga hasil download sudah termasuk efek filter.
-- Boneka teddy bear dan bunny pada frame digambar menggunakan Canvas 2D API, sehingga tidak memerlukan file gambar tambahan dan tidak memiliki masalah background.
+- **Bank Perunggu Theme**: Tema khusus dengan nuansa Merah Marun dan aksen Perunggu/Emas yang memberikan kesan mewah.
+- **Canvas Drawing**: Ornamen boneka teddy bear dan bunny digambar secara dinamis menggunakan path canvas agar tetap tajam di resolusi apapun tanpa file gambar berat.
+- **Filter Pixel-Level**: Filter diterapkan langsung pada data pixel canvas untuk memastikan hasil download identik dengan yang terlihat di layar.
 
 ---
 
-Dibuat dengan ♡
+Dibuat dengan ♡ untuk momen manismu!
