@@ -39,6 +39,7 @@ let totalShots = 4;
 let capturedShots = [];
 let selectedFilter = 'none';
 let selectedTheme = null;
+const bgRemovedCache = new Map();
 
 // ==================== FRAME THEMES ====================
 const frameThemes = [
@@ -231,6 +232,25 @@ const frameThemes = [
         subText: 'nature vibes',
         decoEmoji: '❧',
         cornerStyle: 'lines',
+    },
+    {
+        id: 'pikachu-electric',
+        name: 'Pikachu ⚡',
+        desc: 'Kuning elektrik & lucu',
+        badge: 'new',
+        bgGrad1: '#FFF9C4',
+        bgGrad2: '#FFEB3B',
+        border: '#F9A825',
+        borderLight: '#FFD54F',
+        text: '#5D4037',
+        decoColor: '#F57F17',
+        accent: '#FFC107',
+        previewBg: 'linear-gradient(135deg, #FFF9C4, #FFD54F)',
+        headerFont: '"Outfit", sans-serif',
+        headerText: 'Pika Pika!',
+        subText: '⚡ electric memories ⚡',
+        decoEmoji: '⚡',
+        cornerStyle: 'lightning',
     },
 ];
 
@@ -656,12 +676,14 @@ async function renderPhotoStrip() {
         drawShotBubble(ctx, x + photoW - 22, y + 18, i + 1, theme);
     }
 
-    // --- Draw themed decorative characters ---
-    drawCuteBear(ctx, stripW - 130, -5, 120, theme);
-    drawCuteBunny(ctx, 10, stripH - 125, 120, theme);
+    // --- Draw themed decorative characters (skip for Pikachu theme) ---
+    if (!theme || theme.id !== 'pikachu-electric') {
+        drawCuteBear(ctx, stripW - 130, -5, 120, theme);
+        drawCuteBunny(ctx, 10, stripH - 125, 120, theme);
+    }
 
     // --- Draw extra decorations for special themes ---
-    drawThemeDecorations(ctx, stripW, stripH, theme);
+    await drawThemeDecorations(ctx, stripW, stripH, theme);
 
     // --- Footer ---
     const footerY = padding + headerH + numPhotos * photoH + (numPhotos - 1) * gap + 15;
@@ -699,7 +721,6 @@ function drawBackgroundPattern(ctx, w, h, theme) {
     ctx.fillStyle = theme.decoColor;
 
     if (theme.id === 'bank-perunggu') {
-        // Bronze filigree pattern
         for (let y = 0; y < h; y += 60) {
             for (let x = 0; x < w; x += 60) {
                 ctx.font = '16px serif';
@@ -720,16 +741,22 @@ function drawBackgroundPattern(ctx, w, h, theme) {
                 ctx.fillText('✦', x + 35, y + 35);
             }
         }
+    } else if (theme.id === 'pikachu-electric') {
+        ctx.globalAlpha = 0.06;
+        for (let y = 0; y < h; y += 90) {
+            for (let x = 0; x < w; x += 70) {
+                drawMiniLightningBolt(ctx, x + 35, y + 25, 18, theme.decoColor);
+            }
+        }
     }
 
     ctx.restore();
 }
 
-function drawThemeDecorations(ctx, w, h, theme) {
+async function drawThemeDecorations(ctx, w, h, theme) {
     ctx.save();
 
     if (theme.id === 'bank-perunggu') {
-        // Bronze ornamental corners
         ctx.globalAlpha = 0.6;
         ctx.fillStyle = theme.decoColor;
         ctx.font = '24px serif';
@@ -738,7 +765,6 @@ function drawThemeDecorations(ctx, w, h, theme) {
         ctx.fillText('❖', 35, h - 35);
         ctx.fillText('❖', w - 35, h - 35);
 
-        // Gold line accents
         ctx.strokeStyle = theme.accent;
         ctx.lineWidth = 1;
         ctx.globalAlpha = 0.3;
@@ -770,6 +796,55 @@ function drawThemeDecorations(ctx, w, h, theme) {
             [25, 45], [w - 30, 55], [20, h - 55], [w - 25, h - 45],
         ];
         starPositions.forEach(([x, y]) => ctx.fillText('★', x, y));
+    }
+
+    if (theme.id === 'pikachu-electric') {
+        // Load Pikachu images as blob URLs to avoid canvas taint
+        const pikachuImages = await Promise.all([
+            loadImageUntainted('pikacu1.png'),
+            loadImageUntainted('pikacu2.png'),
+            loadImageUntainted('pikacu3.png'),
+            loadImageUntainted('pikacu4.png'),
+        ]);
+
+        // Draw 5 Pikachu images around the frame (reuse pikacu1 for 5th)
+        const pikachuPositions = [
+            { img: pikachuImages[0], x: w - 160, y: -25,      size: 160 },
+            { img: pikachuImages[1], x: -25,     y: h - 170,  size: 160 },
+            { img: pikachuImages[2], x: w - 145,  y: h - 160,  size: 140 },
+            { img: pikachuImages[3], x: -20,      y: -20,      size: 145 },
+            { img: pikachuImages[0], x: w / 2 - 60, y: h - 155, size: 120 },
+        ];
+
+        pikachuPositions.forEach(({ img, x, y, size }) => {
+            ctx.save();
+            ctx.shadowColor = 'rgba(0,0,0,0.25)';
+            ctx.shadowBlur = 14;
+            ctx.shadowOffsetY = 5;
+            ctx.drawImage(img, x, y, size, size);
+            ctx.restore();
+        });
+
+        // Draw lightning bolts along edges
+        ctx.globalAlpha = 0.7;
+        const boltPositions = [
+            [25, h * 0.25], [w - 35, h * 0.35],
+            [25, h * 0.55], [w - 35, h * 0.65],
+            [25, h * 0.80], [w - 35, h * 0.15],
+        ];
+        boltPositions.forEach(([bx, by]) => {
+            drawLightningBolt(ctx, bx, by, 40, '#F9A825');
+        });
+
+        // Electric sparks
+        ctx.globalAlpha = 0.25;
+        const sparkPositions = [
+            [45, 55], [w - 55, 65], [50, h - 55], [w - 60, h - 45],
+            [w / 2 - 20, 40], [w / 2 + 30, h - 40],
+        ];
+        sparkPositions.forEach(([sx, sy]) => {
+            drawElectricSpark(ctx, sx, sy, 14, '#FFD54F');
+        });
     }
 
     ctx.restore();
@@ -965,6 +1040,250 @@ function drawCornerDecos(ctx, w, h, theme) {
     ctx.restore();
 }
 
+// ==================== PIKACHU DRAWING FUNCTIONS ====================
+
+function drawPikachu(ctx, x, y, size) {
+    ctx.save();
+    const s = size / 100;
+
+    // Shadow
+    ctx.shadowColor = 'rgba(0,0,0,0.18)';
+    ctx.shadowBlur = 10;
+    ctx.shadowOffsetY = 3;
+
+    // --- Ears ---
+    // Left ear
+    ctx.fillStyle = '#FFD54F';
+    ctx.beginPath();
+    ctx.moveTo(x + 25*s, y + 35*s);
+    ctx.lineTo(x + 15*s, y + 2*s);
+    ctx.lineTo(x + 38*s, y + 25*s);
+    ctx.closePath();
+    ctx.fill();
+    // Left ear tip (black)
+    ctx.fillStyle = '#3E2723';
+    ctx.beginPath();
+    ctx.moveTo(x + 18*s, y + 8*s);
+    ctx.lineTo(x + 15*s, y + 2*s);
+    ctx.lineTo(x + 25*s, y + 12*s);
+    ctx.closePath();
+    ctx.fill();
+
+    // Right ear
+    ctx.fillStyle = '#FFD54F';
+    ctx.beginPath();
+    ctx.moveTo(x + 75*s, y + 35*s);
+    ctx.lineTo(x + 85*s, y + 2*s);
+    ctx.lineTo(x + 62*s, y + 25*s);
+    ctx.closePath();
+    ctx.fill();
+    // Right ear tip (black)
+    ctx.fillStyle = '#3E2723';
+    ctx.beginPath();
+    ctx.moveTo(x + 82*s, y + 8*s);
+    ctx.lineTo(x + 85*s, y + 2*s);
+    ctx.lineTo(x + 75*s, y + 12*s);
+    ctx.closePath();
+    ctx.fill();
+
+    ctx.shadowColor = 'transparent';
+    ctx.shadowBlur = 0;
+
+    // --- Head ---
+    ctx.fillStyle = '#FFD54F';
+    ctx.beginPath();
+    ctx.ellipse(x + 50*s, y + 48*s, 30*s, 26*s, 0, 0, Math.PI * 2);
+    ctx.fill();
+
+    // --- Body ---
+    ctx.fillStyle = '#FFD54F';
+    ctx.beginPath();
+    ctx.ellipse(x + 50*s, y + 78*s, 24*s, 22*s, 0, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Belly (lighter yellow)
+    ctx.fillStyle = '#FFF9C4';
+    ctx.beginPath();
+    ctx.ellipse(x + 50*s, y + 80*s, 15*s, 14*s, 0, 0, Math.PI * 2);
+    ctx.fill();
+
+    // --- Arms ---
+    ctx.fillStyle = '#FFD54F';
+    ctx.beginPath();
+    ctx.ellipse(x + 24*s, y + 74*s, 8*s, 12*s, -0.4, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.beginPath();
+    ctx.ellipse(x + 76*s, y + 74*s, 8*s, 12*s, 0.4, 0, Math.PI * 2);
+    ctx.fill();
+
+    // --- Feet ---
+    ctx.fillStyle = '#FFD54F';
+    ctx.beginPath();
+    ctx.ellipse(x + 38*s, y + 96*s, 11*s, 6*s, 0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.beginPath();
+    ctx.ellipse(x + 62*s, y + 96*s, 11*s, 6*s, 0, 0, Math.PI * 2);
+    ctx.fill();
+
+    // --- Tail (lightning bolt shape) ---
+    ctx.fillStyle = '#C8A415';
+    ctx.beginPath();
+    ctx.moveTo(x + 78*s, y + 65*s);
+    ctx.lineTo(x + 92*s, y + 50*s);
+    ctx.lineTo(x + 86*s, y + 58*s);
+    ctx.lineTo(x + 98*s, y + 42*s);
+    ctx.lineTo(x + 88*s, y + 55*s);
+    ctx.lineTo(x + 94*s, y + 48*s);
+    ctx.lineTo(x + 80*s, y + 62*s);
+    ctx.closePath();
+    ctx.fill();
+    ctx.fillStyle = '#F9A825';
+    ctx.beginPath();
+    ctx.moveTo(x + 79*s, y + 64*s);
+    ctx.lineTo(x + 90*s, y + 52*s);
+    ctx.lineTo(x + 85*s, y + 58*s);
+    ctx.lineTo(x + 95*s, y + 44*s);
+    ctx.lineTo(x + 87*s, y + 54*s);
+    ctx.lineTo(x + 92*s, y + 49*s);
+    ctx.lineTo(x + 81*s, y + 62*s);
+    ctx.closePath();
+    ctx.fill();
+
+    // --- Eyes ---
+    ctx.fillStyle = '#1A1A1A';
+    ctx.beginPath();
+    ctx.ellipse(x + 40*s, y + 44*s, 4*s, 5*s, 0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.beginPath();
+    ctx.ellipse(x + 60*s, y + 44*s, 4*s, 5*s, 0, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Eye highlights
+    ctx.fillStyle = '#FFFFFF';
+    ctx.beginPath();
+    ctx.ellipse(x + 42*s, y + 42*s, 2*s, 2*s, 0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.beginPath();
+    ctx.ellipse(x + 62*s, y + 42*s, 2*s, 2*s, 0, 0, Math.PI * 2);
+    ctx.fill();
+
+    // --- Nose ---
+    ctx.fillStyle = '#3E2723';
+    ctx.beginPath();
+    ctx.ellipse(x + 50*s, y + 49*s, 2*s, 1.5*s, 0, 0, Math.PI * 2);
+    ctx.fill();
+
+    // --- Mouth ---
+    ctx.strokeStyle = '#5D4037';
+    ctx.lineWidth = 1.5 * s;
+    ctx.lineCap = 'round';
+    ctx.beginPath();
+    ctx.moveTo(x + 50*s, y + 51*s);
+    ctx.quadraticCurveTo(x + 43*s, y + 57*s, x + 40*s, y + 54*s);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(x + 50*s, y + 51*s);
+    ctx.quadraticCurveTo(x + 57*s, y + 57*s, x + 60*s, y + 54*s);
+    ctx.stroke();
+
+    // --- Red cheeks ---
+    ctx.fillStyle = 'rgba(229, 57, 53, 0.55)';
+    ctx.beginPath();
+    ctx.ellipse(x + 32*s, y + 52*s, 7*s, 5*s, 0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.beginPath();
+    ctx.ellipse(x + 68*s, y + 52*s, 7*s, 5*s, 0, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Cheek shine
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.25)';
+    ctx.beginPath();
+    ctx.ellipse(x + 30*s, y + 50*s, 3*s, 2*s, -0.3, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.beginPath();
+    ctx.ellipse(x + 66*s, y + 50*s, 3*s, 2*s, 0.3, 0, Math.PI * 2);
+    ctx.fill();
+
+    ctx.restore();
+}
+
+function drawLightningBolt(ctx, x, y, size, color) {
+    ctx.save();
+    const s = size / 40;
+    ctx.fillStyle = color;
+    ctx.strokeStyle = '#F57F17';
+    ctx.lineWidth = 1.5 * s;
+
+    ctx.beginPath();
+    ctx.moveTo(x, y);
+    ctx.lineTo(x + 12*s, y);
+    ctx.lineTo(x + 6*s, y + 14*s);
+    ctx.lineTo(x + 14*s, y + 14*s);
+    ctx.lineTo(x - 2*s, y + 40*s);
+    ctx.lineTo(x + 6*s, y + 22*s);
+    ctx.lineTo(x - 2*s, y + 22*s);
+    ctx.closePath();
+    ctx.fill();
+    ctx.stroke();
+
+    // Bright center highlight
+    ctx.fillStyle = 'rgba(255,255,255,0.35)';
+    ctx.beginPath();
+    ctx.moveTo(x + 2*s, y + 4*s);
+    ctx.lineTo(x + 8*s, y + 4*s);
+    ctx.lineTo(x + 5*s, y + 12*s);
+    ctx.closePath();
+    ctx.fill();
+
+    ctx.restore();
+}
+
+function drawMiniLightningBolt(ctx, x, y, size, color) {
+    ctx.save();
+    const s = size / 20;
+    ctx.fillStyle = color || '#F9A825';
+
+    ctx.beginPath();
+    ctx.moveTo(x, y);
+    ctx.lineTo(x + 6*s, y);
+    ctx.lineTo(x + 3*s, y + 8*s);
+    ctx.lineTo(x + 8*s, y + 8*s);
+    ctx.lineTo(x - 1*s, y + 20*s);
+    ctx.lineTo(x + 3*s, y + 11*s);
+    ctx.lineTo(x - 1*s, y + 11*s);
+    ctx.closePath();
+    ctx.fill();
+
+    ctx.restore();
+}
+
+function drawElectricSpark(ctx, cx, cy, size, color) {
+    ctx.save();
+    const s = size / 10;
+    ctx.strokeStyle = color;
+    ctx.lineWidth = 1.5 * s;
+    ctx.lineCap = 'round';
+
+    const numSpokes = 6;
+    for (let i = 0; i < numSpokes; i++) {
+        const angle = (i / numSpokes) * Math.PI * 2;
+        const len = (5 + Math.random() * 5) * s;
+        ctx.beginPath();
+        ctx.moveTo(cx, cy);
+        ctx.lineTo(cx + Math.cos(angle) * len, cy + Math.sin(angle) * len);
+        ctx.stroke();
+    }
+
+    // Center glow dot
+    ctx.fillStyle = '#FFFFFF';
+    ctx.globalAlpha = 0.5;
+    ctx.beginPath();
+    ctx.arc(cx, cy, 2 * s, 0, Math.PI * 2);
+    ctx.fill();
+
+    ctx.restore();
+}
+
 // ==================== ROUNDED RECT HELPERS ====================
 function beginRoundRect(ctx, x, y, w, h, r) {
     ctx.beginPath();
@@ -1006,12 +1325,17 @@ startBtn.addEventListener('click', async () => {
 });
 
 downloadBtn.addEventListener('click', () => {
-    const link = document.createElement('a');
-    link.download = `cute-photobooth-${selectedTheme ? selectedTheme.id : 'photo'}-${Date.now()}.png`;
-    link.href = canvas.toDataURL('image/png');
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+    try {
+        const link = document.createElement('a');
+        link.download = `cute-photobooth-${selectedTheme ? selectedTheme.id : 'photo'}-${Date.now()}.png`;
+        link.href = canvas.toDataURL('image/png');
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    } catch (err) {
+        console.error('Download error:', err);
+        alert('Gagal download foto 😢 Coba gunakan browser lain atau jalankan dari web server lokal.');
+    }
 });
 
 restartBtn.addEventListener('click', () => {
@@ -1025,6 +1349,84 @@ changeFrameBtn.addEventListener('click', () => {
 // ==================== UTILITY ====================
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+function loadImage(src) {
+    return new Promise((resolve, reject) => {
+        const img = new Image();
+        img.onload = () => resolve(img);
+        img.onerror = (e) => reject(new Error(`Failed to load image: ${src}`));
+        img.src = src;
+    });
+}
+
+function loadImageUntainted(src) {
+    return new Promise((resolve, reject) => {
+        const xhr = new XMLHttpRequest();
+        xhr.open('GET', src, true);
+        xhr.responseType = 'blob';
+        xhr.onload = function () {
+            if (xhr.status === 200 || xhr.status === 0) {
+                const blobUrl = URL.createObjectURL(xhr.response);
+                const img = new Image();
+                img.onload = () => {
+                    URL.revokeObjectURL(blobUrl);
+                    resolve(img);
+                };
+                img.onerror = () => reject(new Error(`Failed to create image from blob: ${src}`));
+                img.src = blobUrl;
+            } else {
+                reject(new Error(`XHR failed for ${src}: ${xhr.status}`));
+            }
+        };
+        xhr.onerror = function () {
+            // Fallback to regular image loading
+            console.warn(`[loadImageUntainted] XHR failed for ${src}, falling back to direct load`);
+            const img = new Image();
+            img.onload = () => resolve(img);
+            img.onerror = () => reject(new Error(`Failed to load image: ${src}`));
+            img.src = src;
+        };
+        xhr.send();
+    });
+}
+
+async function loadImageWithTransparentBg(src) {
+    // Return cached version if already processed
+    if (bgRemovedCache.has(src)) {
+        return bgRemovedCache.get(src);
+    }
+
+    console.log(`[BG Removal] Processing: ${src}...`);
+
+    try {
+        // Dynamically import the background removal library from CDN
+        const { removeBackground } = await import('https://esm.sh/@imgly/background-removal@1.5.11');
+
+        // Remove background — returns a Blob
+        const blob = await removeBackground(src, {
+            progress: (key, current, total) => {
+                if (total > 0) {
+                    console.log(`[BG Removal] ${key}: ${Math.round((current / total) * 100)}%`);
+                }
+            }
+        });
+
+        // Convert blob to Image element
+        const url = URL.createObjectURL(blob);
+        const img = await loadImage(url);
+
+        // Cache the result
+        bgRemovedCache.set(src, img);
+        console.log(`[BG Removal] Done: ${src}`);
+        return img;
+    } catch (err) {
+        console.warn(`[BG Removal] Failed for ${src}, using original:`, err);
+        // Fallback: load original image if background removal fails
+        const img = await loadImage(src);
+        bgRemovedCache.set(src, img);
+        return img;
+    }
 }
 
 // ==================== BOOT ====================
